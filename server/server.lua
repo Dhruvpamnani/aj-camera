@@ -1,13 +1,13 @@
-ESX = exports["es_extended"]:getSharedObject()
+local QBCore = exports['qb-core']:GetCoreObject()
 
-ESX.RegisterServerCallback('kim-camera:checkinventoryitem', function(source,cb)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local identifier = xPlayer.identifier
-
-    if xPlayer.getInventoryItem(Config.ItemCamera).count >= 1 then
-        xPlayer.removeInventoryItem(Config.ItemCamera, 1)
-        cb(true)
-    else
-        cb(false)
+QBCore.Functions.CreateUseableItem("camera", function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+	if Player.Functions.RemoveItem(item.name, 1, item.slot) then
+        TriggerClientEvent("aj-camera:client:PlaceCamera", source)
     end
+end)
+
+RegisterNetEvent('aj-camera:server:GiveCamBack', function(data)
+    local Player = QBCore.Functions.GetPlayer(source)
+    Player.Functions.AddItem('camera', 1)
 end)
